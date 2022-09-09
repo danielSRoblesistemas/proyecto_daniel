@@ -7,12 +7,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:proyecto_daniel/bloc/producto_bloc/producto_bloc.dart';
 import 'package:proyecto_daniel/global/colores.dart';
 import 'package:proyecto_daniel/global/environment.dart';
+import 'package:proyecto_daniel/model/producto_model.dart';
 import 'package:proyecto_daniel/utils/size.dart';
 import 'package:proyecto_daniel/utils/responsive_wrapper_utils.dart';
 import 'package:proyecto_daniel/views/ficha_producto_view.dart';
+import 'package:proyecto_daniel/widgets/button_widget.dart';
 import 'package:proyecto_daniel/widgets/data_cell_model_widget.dart';
+import 'package:proyecto_daniel/widgets/item_formulario.dart';
 
 import 'package:proyecto_daniel/widgets/text_widget.dart';
+
+import '../utils/responsive_con_context.dart';
 
 
 class VistaPrimeraView extends StatelessWidget {
@@ -115,7 +120,7 @@ class VistaPrimeraView extends StatelessWidget {
                         cells: [
                           DataCellModelWidget.modelo(
                             anchoCampo: context.tamanoParaDispositivo(
-                                    desktop: context.ancho * 35,
+                                    desktop: context.ancho * 45,
                                     phone: context.ancho * 50),
                                     padding: const EdgeInsets.only(left: 5),
                                     valor: e.id,
@@ -136,8 +141,12 @@ class VistaPrimeraView extends StatelessWidget {
                       )
                       ) .toList(),
                      
-                     
+                     //quede en el modal
+
+
+
                      )
+                     
                 // Container(
                 //   padding: const EdgeInsets.only(top: 20),
                 //   width: context.ancho * 60,
@@ -165,6 +174,94 @@ class VistaPrimeraView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _ProductoModal extends StatefulWidget {
+  @override
+  State<_ProductoModal> createState() => _ProductoModalState();
+}
+
+class _ProductoModalState extends State<_ProductoModal> {
+  late ProductoModel producto;
+
+  @override
+  void initState() {
+    producto = context.read<ProductoBloc>().state.producto;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // final bool isPhone = (ResponsiveWrapper.of(context).isPhone) ? true : false;
+
+    return Container(
+      // padding: const EdgeInsets.only(top: 0),
+      margin: EdgeInsets.symmetric(
+          horizontal: 
+          ResponsiveWrapperUtilsContext.determinarTamano(context,
+              desktop: 10, tablet: 5, mobile: 10, phone: 5)
+              ),
+      width:
+       ResponsiveWrapperUtilsContext .determinarTamano(context,
+          desktop: 380, tablet: 465, mobile: 465, phone: 465),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 20),
+          Column(children: [
+            ...producto
+                .toJson()
+                .entries
+                .map(
+                  (item) => ItemFormulario(
+                    titulo: item
+                        .key, // esto me sirve para poder detectar que campo es en el mapa util
+                    valor: producto.descripcion,
+                    onChanged: (value) {
+                      producto = producto
+                          .copyWith(data: {'descripcion': value});
+                    },
+                  ),
+                )
+          ]),
+          SizedBox(
+              height: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                  desktop: 20, tablet: 15, mobile: 10, phone: 10)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ButtonModeWidget.botonSimple(
+                titulo:
+                    (producto.id.isEmpty) ? 'Guardar' : 'Atualizar',
+                tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                    desktop: 16, tablet: 14, mobile: 14, phone: 12),
+                onPressed: () {
+                  // context.read<ProductoBloc>().add(OnValidarProducto(
+                  //     producto: producto, pagina: 0));
+                },
+              ),
+              ButtonModeWidget.botonSimple(
+                // ancho: 100,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.black54),
+                ),
+                titulo: 'Salir',
+                tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                    desktop: 16, tablet: 14, mobile: 14, phone: 12),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+          SizedBox(
+              height: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                  desktop: 20, tablet: 0, mobile: 5, phone: 5))
+        ],
+      ),
     );
   }
 }

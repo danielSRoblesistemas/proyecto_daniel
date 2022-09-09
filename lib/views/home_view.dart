@@ -34,7 +34,7 @@ class HomeView extends StatelessWidget {
       body: Row(
         children: [
           if (ResponsiveWrapperUtils(context).mostrarCuando(mobile: true, tablet: true, desktop: true)) const _MenuLateral(),
-           SizedBox(width: 20), 
+           const SizedBox(width: 20), 
            const Expanded(child: VistaPrimeraView()) //VistaPrimeraView
         ],
       ),

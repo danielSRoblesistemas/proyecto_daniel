@@ -35,4 +35,9 @@ class ProductoModel {
     
     return listaProducto;
   }
+
+  static Map<String, String> tituloFormulario = {
+    'id':'Id Producto',
+    'descripcion': 'Nombre de Categoria',
+    };
 }

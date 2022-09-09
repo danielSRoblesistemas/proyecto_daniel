@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 extension ResponsiveWrapperUtils on BuildContext {
-  double determinarTamano({
+   double determinarTamano({
     required double desktop,
     double? tablet,
     double? mobile,
