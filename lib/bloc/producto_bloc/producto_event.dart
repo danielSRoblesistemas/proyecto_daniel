@@ -23,6 +23,10 @@ class OnValidarProducto extends ProductoEvent {
       {required this.producto, required this.pagina});
 }
 
+class OnGuardarProducto extends ProductoEvent {
+  const OnGuardarProducto();
+}
+
 class OnActualizaProducto extends ProductoEvent {
   final Map<String, dynamic> data;
   const OnActualizaProducto({required this.data});
