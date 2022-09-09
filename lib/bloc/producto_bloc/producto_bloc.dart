@@ -32,7 +32,7 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
       try {
         // if (errorCredenciales.isNotEmpty) {
         //         emit(state.copyWith(
-        //           isWorking: false,
+        //           isWorking: false,  s
         //           // error: errorCredenciales,
         //           accion: Environment.blocOnModificarProducto));
         //       return;

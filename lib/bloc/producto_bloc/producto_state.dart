@@ -15,7 +15,7 @@ class ProductoState extends Equatable {
     ProductoModel? producto,
   }) : producto = producto ?? ProductoModel();
 
-  ProductoState copyWith({ 
+  ProductoState copyWith({ //segun el modelo nuevo no va mas data el mapa 
           bool? isWorking,
           String? error,
           String? campoError,

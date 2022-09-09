@@ -1,5 +1,6 @@
 class Environment {
 
+//Globales
   static String dataOk = 'Ok';
   static String dataNOk = 'NOk';
   static String status = 'status';
