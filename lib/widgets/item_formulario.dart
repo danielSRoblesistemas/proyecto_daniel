@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:proyecto_daniel/model/producto_model.dart';
-import 'package:proyecto_daniel/utils/responsive_con_context.dart';
 
+import 'package:proyecto_daniel/utils/responsive_con_context.dart';
+import 'package:proyecto_daniel/model/producto_model.dart';
 import 'package:proyecto_daniel/widgets/textfield_widget.dart';
 
 class ItemFormulario extends StatelessWidget { // ocupado en categorias view

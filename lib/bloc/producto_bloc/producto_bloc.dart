@@ -1,7 +1,7 @@
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:proyecto_daniel/global/environment.dart';
 import 'package:proyecto_daniel/model/producto_model.dart';
 
@@ -14,9 +14,9 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     on<OnModificarProducto>(_onModificarProducto);
     on<OnValidarProducto>(_onValidarProducto);
     on<OnGuardarProducto>(_onGuardarBotCategoria);
-    // on<OnActualizaProducto>();
+
     on<OnObtenerlstProducto>(_onObtenerlstProducto);
-    // on<OnEliminarProducto>(_onEliminarProducto);
+    on<OnEliminarProducto>(_onEliminarProducto);
   }
 
   Future<void> _onNuevoProducto(OnNuevoProducto event, Emitter emit) async {
@@ -53,7 +53,7 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
       emit(state.copyWith(
         producto: producto,
         isWorking: false,
-        error: '',
+        error: error,
         campoError: '',
         accion: Environment.blocOnModificarProducto,
       ));
@@ -74,7 +74,6 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
         accion: Environment.blocOnObtenerlstProducto,
       ));
 
-      String error = '';
 
       emit(state.producto.obtenerListaEstatica());
     } catch (e) {}
@@ -144,5 +143,28 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
       error: error,
       accion: Environment.blocOnValidaProducto,
     ));
+  }
+
+  Future<void> _onEliminarProducto(OnEliminarProducto event, Emitter emit) async {
+    try {
+      emit(state.copyWith(
+        isWorking: true,
+        error: '',
+        accion: Environment.blocOnEliminarProducto,
+      ));
+
+      String error = '';
+
+      List<ProductoModel> listaProductosBloc = state.listaProductos;
+      listaProductosBloc.removeWhere((element) => element.id == event.idProducto);
+      emit(state.copyWith(
+        listaProductos: listaProductosBloc,
+        isWorking: true,
+        error: error,
+        accion: Environment.blocOnEliminarProducto,
+      ));
+    } catch (e) {
+      print(e);
+    }
   }
 }

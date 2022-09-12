@@ -1,11 +1,15 @@
+import 'package:flutter/material.dart';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:proyecto_daniel/bloc/notificaciones/notificaciones_bloc.dart';
+
 import 'package:proyecto_daniel/global/colores.dart';
 import 'package:proyecto_daniel/utils/responsive_wrapper_utils.dart';
 import 'package:proyecto_daniel/views/productos_view.dart';
-
-
+import 'package:proyecto_daniel/widgets/notificacion_widget.dart';
+import 'package:proyecto_daniel/utils/size.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -34,8 +38,25 @@ class HomeView extends StatelessWidget {
       body: Row(
         children: [
           if (ResponsiveWrapperUtils(context).mostrarCuando(mobile: true, tablet: true, desktop: true)) const _MenuLateral(),
-           const SizedBox(width: 20), 
-           const Expanded(child: VistaPrimeraView()) //VistaPrimeraView
+          SizedBox(width: context.ancho * 5 ),
+          Expanded(
+              child: Stack(
+            children: [
+              const VistaPrimeraView(),
+              BlocBuilder<NotificacionesBloc, NotificacionesState>(
+                builder: (context, state) {
+                  return Positioned( left: context.ancho * 25,
+                    child: Column(
+                      children: state.notificaciones.entries
+                          .map((e) => NotificacionWidget.agregaNotificacion(indice: e.key, notificacion: e.value))
+                          .toList(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          )) ,//VistaPrimeraView
+           SizedBox(width: context.ancho * 5 ),
         ],
       ),
     );
@@ -79,7 +100,6 @@ class _MenuLateral extends StatelessWidget {
                       log('Producto');
                     }),
                 const SizedBox(height: 20),
-
               ],
             ),
           ),

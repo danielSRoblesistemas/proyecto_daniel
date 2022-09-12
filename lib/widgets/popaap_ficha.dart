@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:responsive_framework/responsive_framework.dart';
+
 import 'package:proyecto_daniel/utils/size.dart';
 import 'package:proyecto_daniel/widgets/text_widget.dart';
 
-
-import 'package:responsive_framework/responsive_framework.dart';
 
 class PopAppSolicitudes extends StatelessWidget {
   final Widget child;

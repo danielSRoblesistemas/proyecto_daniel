@@ -1,7 +1,9 @@
-import 'package:proyecto_daniel/utils/size.dart';
 import 'package:flutter/material.dart';
-import 'package:proyecto_daniel/widgets/text_widget.dart';
+
 import 'package:responsive_framework/responsive_framework.dart';
+
+import 'package:proyecto_daniel/utils/size.dart';
+import 'package:proyecto_daniel/widgets/text_widget.dart';
 
 class DataCellModelWidget extends DataCell {
   const DataCellModelWidget({

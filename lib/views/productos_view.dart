@@ -1,12 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../utils/responsive_con_context.dart';
 
+import 'package:proyecto_daniel/bloc/notificaciones/notificaciones_bloc.dart';
 import 'package:proyecto_daniel/bloc/producto_bloc/producto_bloc.dart';
+
 import 'package:proyecto_daniel/global/colores.dart';
 import 'package:proyecto_daniel/global/environment.dart';
+import 'package:proyecto_daniel/model/notificacion.dart';
 import 'package:proyecto_daniel/model/producto_model.dart';
 import 'package:proyecto_daniel/utils/size.dart';
 import 'package:proyecto_daniel/utils/responsive_wrapper_utils.dart';
@@ -14,10 +17,9 @@ import 'package:proyecto_daniel/widgets/button_widget.dart';
 import 'package:proyecto_daniel/widgets/data_cell_model_widget.dart';
 import 'package:proyecto_daniel/widgets/item_formulario.dart';
 import 'package:proyecto_daniel/widgets/popaap_ficha.dart';
-
 import 'package:proyecto_daniel/widgets/text_widget.dart';
 
-import '../utils/responsive_con_context.dart';
+
 
 class VistaPrimeraView extends StatelessWidget {
   const VistaPrimeraView({super.key});
@@ -33,7 +35,7 @@ class VistaPrimeraView extends StatelessWidget {
                 context: context,
                 builder: (context) => PopAppSolicitudes(
                     titulo: (state.producto.id.isNotEmpty) ? 'Ficha Producto' : 'Alta Producto', //state.chatbot.nombre
-                    altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 40, tablet: 30, mobile: 30, phone: 35),
+                    altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 40, tablet: 40, mobile: 40, phone: 40),
                     isBotonSalir: true,
                     // ancho: 1000,
                     paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
@@ -44,16 +46,32 @@ class VistaPrimeraView extends StatelessWidget {
           }
           if (state.accion == Environment.blocOnValidaProducto) {
             context.read<ProductoBloc>().add(const OnGuardarProducto());
+
             Navigator.pop(context);
           }
+          if (state.accion == Environment.blocOnGuardarProducto) {
+            context.read<NotificacionesBloc>().add(OnNuevaNotificacionEvent(
+                  const Notificacion(
+                    descripcion: 'Producto guardado con exito',
+                    tipoNotificacion: TipoNotificacion.confirmacion,
+                    titulo: 'Éxito',
+                  ),
+                ));
+          }
+        } else {
+          context.read<NotificacionesBloc>().add(OnNuevaNotificacionEvent(
+                const Notificacion(
+                  descripcion: 'Debe completar el campo requerido',
+                  tipoNotificacion: TipoNotificacion.error,
+                  titulo: 'Error',
+                ),
+              ));
         }
       },
       builder: (context, state) {
         return Container(
           height: double.infinity,
-          padding: const EdgeInsets.only(
-            top: 20,
-          ),
+          padding: const EdgeInsets.only(top: 20, left: 25),
           color: Colores.grisFondo,
           child: SingleChildScrollView(
             child: Column(
@@ -75,10 +93,13 @@ class VistaPrimeraView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Expanded(child: const SizedBox(height: 30)),
+                      const Expanded(
+                          child: SizedBox(
+                        height: 40,
+                      )),
                       const Icon(Icons.add, color: Colors.orange, size: 20),
                       TextModelWidget.titulo(texto: 'Nuevo Producto', tamanioTexto: 15, colorTexto: Colors.orange),
-                      const SizedBox(width: 30)
+                      SizedBox(width: context.ancho * 3)
                     ],
                   ),
                 ),
@@ -139,7 +160,7 @@ class VistaPrimeraView extends StatelessWidget {
                       ...state.listaProductos
                           .map((e) => DataRow(cells: [
                                 DataCellModelWidget.modelo(
-                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 50),
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 10),
                                   padding: const EdgeInsets.only(left: 15),
                                   valor: e.id,
                                   ontap: () {
@@ -147,7 +168,7 @@ class VistaPrimeraView extends StatelessWidget {
                                   },
                                 ),
                                 DataCellModelWidget.modelo(
-                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 50),
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 10),
                                   padding: const EdgeInsets.only(left: 15),
                                   valor: e.descripcion,
                                   ontap: () {
@@ -156,7 +177,7 @@ class VistaPrimeraView extends StatelessWidget {
                                   },
                                 ),
                                 DataCellModelWidget.modelo(
-                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 50),
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 10),
                                   padding: const EdgeInsets.only(left: 25),
                                   valor: e.descripcion,
                                   child: IconButton(
@@ -172,14 +193,9 @@ class VistaPrimeraView extends StatelessWidget {
                                                 paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
                                                 paddingTitulo: const EdgeInsets.only(top: 0),
                                                 child: _EliminarModal(producto: e)));
-                                        // context.read<ProductoBloc>().add(const OnNuevoProducto());
-                                        // context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
                                       },
                                       icon: const Icon(Icons.cancel, color: Colores.eliminar)),
-                                  ontap: () {
-                                    // context.read<ProductoBloc>().add(const OnNuevoProducto());
-                                    // context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
-                                  },
+                                  ontap: () {},
                                 ),
                               ]))
                           .toList(),
@@ -273,7 +289,7 @@ class _EliminarModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -286,10 +302,13 @@ class _EliminarModal extends StatelessWidget {
             titulo: 'Eliminar',
             tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 14, mobile: 14, phone: 12),
             onPressed: () {
-              context.read<ProductoBloc>().add( OnEliminarProducto(idProducto: producto.id));
+              context.read<ProductoBloc>().add(OnEliminarProducto(idProducto: producto.id));
+              Navigator.pop(context);
             },
           ),
-          SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           ButtonModeWidget.botonSimple(
             // ancho: 100,
             style: ButtonStyle(

@@ -15,4 +15,8 @@ class Environment {
   static String blocOnObtenerlstProducto = 'OnObtenerlstProducto';
   static String blocOnEliminarProducto = 'OnEliminarProducto';
 
+
+  static String blocOnNuevaNotificacion = 'blocOnNuevaNotificacion';
+  static String blocOnEliminarNotificacion= 'blocOnEliminarNotificacion';
+  
 }

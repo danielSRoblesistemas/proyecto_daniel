@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:proyecto_daniel/bloc/producto_bloc/producto_bloc.dart';
-import 'package:proyecto_daniel/views/home_view.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
-void main() => runApp(MyApp());
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:proyecto_daniel/bloc/notificaciones/notificaciones_bloc.dart';
+import 'package:proyecto_daniel/bloc/producto_bloc/producto_bloc.dart';
+
+import 'package:proyecto_daniel/views/home_view.dart';
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: ((context) => ProductoBloc()))
+        BlocProvider(create: ((context) => ProductoBloc())),
+        BlocProvider(create: ((context) => NotificacionesBloc()))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

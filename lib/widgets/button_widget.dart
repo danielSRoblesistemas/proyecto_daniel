@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:proyecto_daniel/utils/size.dart';
 import 'package:proyecto_daniel/widgets/text_widget.dart';
 import 'package:proyecto_daniel/utils/responsive_wrapper_utils.dart';
