@@ -14,11 +14,11 @@ import 'package:proyecto_daniel/views/ficha_producto_view.dart';
 import 'package:proyecto_daniel/widgets/button_widget.dart';
 import 'package:proyecto_daniel/widgets/data_cell_model_widget.dart';
 import 'package:proyecto_daniel/widgets/item_formulario.dart';
+import 'package:proyecto_daniel/widgets/popaap_ficha.dart';
 
 import 'package:proyecto_daniel/widgets/text_widget.dart';
 
 import '../utils/responsive_con_context.dart';
-
 
 class VistaPrimeraView extends StatelessWidget {
   const VistaPrimeraView({super.key});
@@ -29,124 +29,119 @@ class VistaPrimeraView extends StatelessWidget {
       listenWhen: (previous, current) => !current.isWorking,
       listener: (context, state) {
         if (state.error.isEmpty) {
-          if (state.accion == Environment.blocOnNuevoProducto ||state.accion == Environment.blocOnModificarProducto){
-             Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FichaProductoView()));
-             //esta navegacion no va a funcar esta solo de referencia
-          } 
-
+          if (state.accion == Environment.blocOnNuevoProducto || state.accion == Environment.blocOnModificarProducto) {
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FichaProductoView()));
+            //esta navegacion no va a funcar esta solo de referencia
+          }
         }
-
       },
       builder: (context, state) {
         return Container(
           height: double.infinity,
-          padding: const EdgeInsets.only(top: 20, ),
+          padding: const EdgeInsets.only(
+            top: 20,
+          ),
           color: Colores.grisFondo,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                    'Productos', 
-                    style: GoogleFonts.roboto(
-                    fontSize: 25, 
+                  'Productos',
+                  style: GoogleFonts.roboto(
+                    fontSize: 25,
                     color: Colores.verdeOscuroFondo,
-                    fontWeight: FontWeight.bold, 
+                    fontWeight: FontWeight.bold,
                   ),
-                ),  
+                ),
                 InkWell(
-                        onTap: () {
-                          context.read<ProductoBloc>().add(const OnNuevoProducto());
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                                 Expanded(child: const SizedBox(height: 30)),
-                           const Icon(Icons.add,
-                                color: Colors.orange,
-                                size: 20),
-                            TextModelWidget.titulo(
-                                texto: 'Nuevo Producto',
-                                tamanioTexto: 15,
-                                colorTexto: Colors.orange),
-                           const SizedBox(width: 30)
-                          ],
-                        ),),
-
-
-                   DataTable(
-                        horizontalMargin: 0,
-                        columnSpacing: 0,
-                        headingRowHeight: 25,
-                        dataRowHeight: 30,
-                        headingRowColor: MaterialStateProperty.all<Color>( Colores.grisFondo),
-                    columns:[
-                           DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                alignment: Alignment.centerLeft,
-                                height: 25,
-                                width: context.ancho * 20,
-                                child: TextModelWidget.titulo(
-                                  tamanioTexto: 12,
-                                  tipoFuente: FontWeight.w600,
-                                  texto: 'ID Producto',
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                alignment: Alignment.centerLeft,
-                                height: 25,
-                                width: context.ancho * 20,
-                                child: TextModelWidget.titulo(
-                                  tamanioTexto: 12,
-                                  tipoFuente: FontWeight.w600,
-                                  texto: 'Descripcion',
-                                ),
-                              ),
-                            ),
-                          ),
+                  onTap: () {
+                    context.read<ProductoBloc>().add(const OnNuevoProducto());
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(child: const SizedBox(height: 30)),
+                      const Icon(Icons.add, color: Colors.orange, size: 20),
+                      TextModelWidget.titulo(texto: 'Nuevo Producto', tamanioTexto: 15, colorTexto: Colors.orange),
+                      const SizedBox(width: 30)
                     ],
-                     rows: state.producto.obtenerListaEstatica().map(
-                      (e) => DataRow(
-                        cells: [
-                          DataCellModelWidget.modelo(
-                            anchoCampo: context.tamanoParaDispositivo(
-                                    desktop: context.ancho * 45,
-                                    phone: context.ancho * 50),
-                                    padding: const EdgeInsets.only(left: 5),
-                                    valor: e.id,
-                                    ontap: () {
-                                      
-                                    },),
-                          DataCellModelWidget.modelo(
-                            anchoCampo: context.tamanoParaDispositivo(
-                                    desktop: context.ancho * 35,
-                                    phone: context.ancho * 50),
-                                    padding: const EdgeInsets.only(left: 5),
-                                    valor: e.descripcion,
-                                    ontap: () {
-                                      
-                                    },),          
-                        
-                      ]
-                      )
-                      ) .toList(),
-                     
-                     //quede en el modal
+                  ),
+                ),
 
+                DataTable(
+                  horizontalMargin: 0,
+                  columnSpacing: 0,
+                  headingRowHeight: 25,
+                  dataRowHeight: 30,
+                  headingRowColor: MaterialStateProperty.all<Color>(Colores.grisFondo),
+                  columns: [
+                    DataColumn(
+                      label: Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          alignment: Alignment.centerLeft,
+                          height: 25,
+                          width: context.ancho * 20,
+                          child: TextModelWidget.titulo(
+                            tamanioTexto: 12,
+                            tipoFuente: FontWeight.w600,
+                            texto: 'ID Producto',
+                          ),
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          alignment: Alignment.centerLeft,
+                          height: 25,
+                          width: context.ancho * 20,
+                          child: TextModelWidget.titulo(
+                            tamanioTexto: 12,
+                            tipoFuente: FontWeight.w600,
+                            texto: 'Descripcion',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: state.producto
+                      .obtenerListaEstatica()
+                      .map((e) => DataRow(cells: [
+                            DataCellModelWidget.modelo(
+                              anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 45, phone: context.ancho * 50),
+                              padding: const EdgeInsets.only(left: 5),
+                              valor: e.id,
+                              ontap: () {},
+                            ),
+                            DataCellModelWidget.modelo(
+                              anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 35, phone: context.ancho * 50),
+                              padding: const EdgeInsets.only(left: 5),
+                              valor: e.descripcion,
+                              ontap: () {
+                                showDialog<String>(
+                                    context: context,
+                                    builder: (context) => PopAppSolicitudes(
+                                        titulo:
+                                            (state.producto.id.isNotEmpty) ? 'Ficha Categoria' : 'Alta Categoria', //state.chatbot.nombre
+                                        altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                                            desktop: 25, tablet: 30, mobile: 30, phone: 35),
+                                        isBotonSalir: true,
+                                        // ancho: 1000,
+                                        paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
+                                        paddingTitulo: const EdgeInsets.only(top: 0),
+                                        child: _ProductoModal()));
+                              },
+                            ),
+                          ]))
+                      .toList(),
 
+                  //quede en el modal
+                )
 
-                     )
-                     
                 // Container(
                 //   padding: const EdgeInsets.only(top: 20),
                 //   width: context.ancho * 60,
@@ -163,7 +158,7 @@ class VistaPrimeraView extends StatelessWidget {
                 //         ),
                 //       ),
                 //       Text('aca va ir mi tabla de producto recorrida por el toJson del modelo producto'),
-                //       // FloatingActionButton(onPressed: (() {   
+                //       // FloatingActionButton(onPressed: (() {
                 //       // }))
                 //       // const _ProductoVista()
                 //     ],
@@ -199,45 +194,32 @@ class _ProductoModalState extends State<_ProductoModal> {
     return Container(
       // padding: const EdgeInsets.only(top: 0),
       margin: EdgeInsets.symmetric(
-          horizontal: 
-          ResponsiveWrapperUtilsContext.determinarTamano(context,
-              desktop: 10, tablet: 5, mobile: 10, phone: 5)
-              ),
-      width:
-       ResponsiveWrapperUtilsContext .determinarTamano(context,
-          desktop: 380, tablet: 465, mobile: 465, phone: 465),
+          horizontal: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 10, tablet: 5, mobile: 10, phone: 5)),
+      width: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 380, tablet: 465, mobile: 465, phone: 465),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 20),
           Column(children: [
-            ...producto
-                .toJson()
-                .entries
-                .map(
+            ...producto.toJson().entries.map(
                   (item) => ItemFormulario(
-                    titulo: item
-                        .key, // esto me sirve para poder detectar que campo es en el mapa util
-                    valor: producto.descripcion,
+                    titulo: item.key, // esto me sirve para poder detectar que campo es en el mapa util
+                    valor: item.key.contains(producto.id) ? producto.id : producto.descripcion,
                     onChanged: (value) {
-                      producto = producto
-                          .copyWith(data: {'descripcion': value});
+                      print(value);
+                      producto = producto.copyWith(data: {'descripcion': value});
                     },
                   ),
                 )
           ]),
-          SizedBox(
-              height: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                  desktop: 20, tablet: 15, mobile: 10, phone: 10)),
+          SizedBox(height: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 20, tablet: 15, mobile: 10, phone: 10)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ButtonModeWidget.botonSimple(
-                titulo:
-                    (producto.id.isEmpty) ? 'Guardar' : 'Atualizar',
-                tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                    desktop: 16, tablet: 14, mobile: 14, phone: 12),
+                titulo: (producto.id.isEmpty) ? 'Guardar' : 'Atualizar',
+                tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 14, mobile: 14, phone: 12),
                 onPressed: () {
                   // context.read<ProductoBloc>().add(OnValidarProducto(
                   //     producto: producto, pagina: 0));
@@ -249,21 +231,16 @@ class _ProductoModalState extends State<_ProductoModal> {
                   backgroundColor: MaterialStateProperty.all(Colors.black54),
                 ),
                 titulo: 'Salir',
-                tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                    desktop: 16, tablet: 14, mobile: 14, phone: 12),
+                tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 14, mobile: 14, phone: 12),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
             ],
           ),
-          SizedBox(
-              height: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                  desktop: 20, tablet: 0, mobile: 5, phone: 5))
+          SizedBox(height: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 20, tablet: 0, mobile: 5, phone: 5))
         ],
       ),
     );
   }
 }
-
-
