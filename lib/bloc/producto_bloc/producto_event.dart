@@ -35,6 +35,15 @@ class OnObtenerlstProducto extends ProductoEvent {
   const OnObtenerlstProducto();
 }
 
+class OnEliminarProducto extends ProductoEvent {
+  final String idProducto;
+  const OnEliminarProducto({required this.idProducto});
+}
+
+
+
+
+
 
 
 

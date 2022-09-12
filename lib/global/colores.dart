@@ -12,5 +12,7 @@ class Colores {
 //Boton
 // 
  static const Color botonVerde = Color.fromARGB(196, 6, 131, 121);
+ static const Color eliminar = Color.fromARGB(214, 224, 40, 8);
+ 
 
 }

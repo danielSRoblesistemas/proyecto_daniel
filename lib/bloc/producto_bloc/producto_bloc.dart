@@ -16,6 +16,7 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     on<OnGuardarProducto>(_onGuardarBotCategoria);
     // on<OnActualizaProducto>();
     on<OnObtenerlstProducto>(_onObtenerlstProducto);
+    // on<OnEliminarProducto>(_onEliminarProducto);
   }
 
   Future<void> _onNuevoProducto(OnNuevoProducto event, Emitter emit) async {
@@ -90,9 +91,9 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     ProductoModel producto = state.producto;
     listaProductosBloc.removeWhere((element) => element.id == producto.id);
 
-    int id = buscarIdNoRepetido(listaProductosBloc);
+    // int id = buscarIdNoRepetido(listaProductosBloc);
 
-    producto = producto.copyWith(id: id.toString());
+    // producto = producto.copyWith(id: id.toString());
     listaProductosBloc.add(producto);
 
     emit(state.copyWith(
@@ -106,22 +107,20 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     // })
   }
 
-  int buscarIdNoRepetido(List<ProductoModel> listaProductosBloc) {
-    Random rnd = Random();
-    int randomNumber = rnd.nextInt(10000) ;//rnd.nextInt(10000); //2
-    bool repetido = false;
-    listaProductosBloc.forEach((element) {
-      if (element.id == randomNumber.toString() ) {
-        repetido = true;
-      }
-    });
-
-    if (repetido) {
-      buscarIdNoRepetido(listaProductosBloc);
-    }
-    return randomNumber;
-
-  }
+  // int buscarIdNoRepetido(List<ProductoModel> listaProductosBloc) {
+  //   Random rnd = Random();
+  //   int randomNumber = rnd.nextInt(10000) ;//rnd.nextInt(10000); //2
+  //   bool repetido = false;
+  //   listaProductosBloc.forEach((element) {
+  //     if (element.id == randomNumber.toString() ) {
+  //       repetido = true;
+  //     }
+  //   });
+  //   if (repetido) {
+  //     buscarIdNoRepetido(listaProductosBloc);
+  //   }
+  //   return randomNumber;
+  // }
 
   Future<void> _onValidarProducto(OnValidarProducto event, Emitter emit) async {
     emit(state.copyWith(

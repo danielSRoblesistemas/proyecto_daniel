@@ -32,7 +32,7 @@ class VistaPrimeraView extends StatelessWidget {
             showDialog<String>(
                 context: context,
                 builder: (context) => PopAppSolicitudes(
-                    titulo: (state.producto.id.isNotEmpty) ? 'Ficha Categoria' : 'Alta Categoria', //state.chatbot.nombre
+                    titulo: (state.producto.id.isNotEmpty) ? 'Ficha Producto' : 'Alta Producto', //state.chatbot.nombre
                     altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 40, tablet: 30, mobile: 30, phone: 35),
                     isBotonSalir: true,
                     // ancho: 1000,
@@ -114,7 +114,22 @@ class VistaPrimeraView extends StatelessWidget {
                             child: TextModelWidget.titulo(
                               tamanioTexto: 12,
                               tipoFuente: FontWeight.w600,
-                              texto: 'Descripcion',//state.listaProductos.length.toString()
+                              texto: 'Descripcion', //state.listaProductos.length.toString()
+                            ),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            alignment: Alignment.centerLeft,
+                            height: 20,
+                            width: context.ancho * 20,
+                            child: TextModelWidget.titulo(
+                              tamanioTexto: 12,
+                              tipoFuente: FontWeight.w600,
+                              texto: 'Eliminar', //state.listaProductos.length.toString()
                             ),
                           ),
                         ),
@@ -124,34 +139,46 @@ class VistaPrimeraView extends StatelessWidget {
                       ...state.listaProductos
                           .map((e) => DataRow(cells: [
                                 DataCellModelWidget.modelo(
-                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 45, phone: context.ancho * 50),
-                                  padding: const EdgeInsets.only(left: 5),
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 50),
+                                  padding: const EdgeInsets.only(left: 15),
                                   valor: e.id,
                                   ontap: () {
-                                    context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
+                                    context.read<ProductoBloc>().add(OnModificarProducto(idProducto: e.id));
                                   },
                                 ),
                                 DataCellModelWidget.modelo(
-                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 35, phone: context.ancho * 50),
-                                  padding: const EdgeInsets.only(left: 5),
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 50),
+                                  padding: const EdgeInsets.only(left: 15),
                                   valor: e.descripcion,
                                   ontap: () {
                                     // context.read<ProductoBloc>().add(const OnNuevoProducto());
-                                    context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
-                                    // showDialog<String>(
-                                    //     context: context,
-                                    //     builder: (context) => PopAppSolicitudes(
-                                    //         titulo: (state.producto.id.isNotEmpty)
-                                    //             ? 'Ficha Categoria'
-                                    //             : 'Alta Categoria', //state.chatbot.nombre
-                                    //         altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                                    //             desktop: 25, tablet: 30, mobile: 30, phone: 35),
-                                    //         isBotonSalir: true,
-                                    //         // ancho: 1000,
-                                    //         paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
-                                    //         paddingTitulo: const EdgeInsets.only(top: 0),
-                                    //         child: _ProductoModal()));
-
+                                    context.read<ProductoBloc>().add(OnModificarProducto(idProducto: e.id));
+                                  },
+                                ),
+                                DataCellModelWidget.modelo(
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 50),
+                                  padding: const EdgeInsets.only(left: 25),
+                                  valor: e.descripcion,
+                                  child: IconButton(
+                                      onPressed: () {
+                                        showDialog<String>(
+                                            context: context,
+                                            builder: (context) => PopAppSolicitudes(
+                                                titulo: 'Seguro desea eliminar?', //state.chatbot.nombre
+                                                altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                                                    desktop: 40, tablet: 30, mobile: 30, phone: 35),
+                                                isBotonSalir: true,
+                                                // ancho: 1000,
+                                                paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
+                                                paddingTitulo: const EdgeInsets.only(top: 0),
+                                                child: _EliminarModal(producto: e)));
+                                        // context.read<ProductoBloc>().add(const OnNuevoProducto());
+                                        // context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
+                                      },
+                                      icon: const Icon(Icons.cancel, color: Colores.eliminar)),
+                                  ontap: () {
+                                    // context.read<ProductoBloc>().add(const OnNuevoProducto());
+                                    // context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
                                   },
                                 ),
                               ]))
@@ -204,10 +231,7 @@ class _ProductoModalState extends State<_ProductoModal> {
                     onChanged: (value) {
                       // print(item.key);
                       // print(value);
-                      producto = (item.key.contains('id'))
-                       ? producto.copyWith(id: value) 
-                       : producto.copyWith(data: {'descripcion': value});
-
+                      producto = (item.key.contains('id')) ? producto.copyWith(id: value) : producto.copyWith(data: {'descripcion': value});
                     },
                   ),
                 )
@@ -237,6 +261,46 @@ class _ProductoModalState extends State<_ProductoModal> {
             ],
           ),
           SizedBox(height: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 20, tablet: 0, mobile: 5, phone: 5))
+        ],
+      ),
+    );
+  }
+}
+
+class _EliminarModal extends StatelessWidget {
+  final ProductoModel producto;
+  const _EliminarModal({required this.producto});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ButtonModeWidget.botonSimple(
+            // ancho: 100,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colores.eliminar),
+            ),
+            titulo: 'Eliminar',
+            tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 14, mobile: 14, phone: 12),
+            onPressed: () {
+              context.read<ProductoBloc>().add( OnEliminarProducto(idProducto: producto.id));
+            },
+          ),
+          SizedBox(width: 10,),
+          ButtonModeWidget.botonSimple(
+            // ancho: 100,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.black54),
+            ),
+            titulo: 'Cancelar',
+            tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 14, mobile: 14, phone: 12),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ],
       ),
     );
