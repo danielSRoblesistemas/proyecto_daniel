@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:proyecto_daniel/global/environment.dart';
@@ -87,9 +89,10 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     List<ProductoModel> listaProductosBloc = state.listaProductos;
     ProductoModel producto = state.producto;
     listaProductosBloc.removeWhere((element) => element.id == producto.id);
-    producto = producto.copyWith(id: listaProductosBloc.length.toString());
 
-    // ProductoModel productoFinal = state.producto;
+    int id = buscarIdNoRepetido(listaProductosBloc);
+
+    producto = producto.copyWith(id: id.toString());
     listaProductosBloc.add(producto);
 
     emit(state.copyWith(
@@ -101,6 +104,23 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
     // listaProductosBloc.forEach((element) {
 
     // })
+  }
+
+  int buscarIdNoRepetido(List<ProductoModel> listaProductosBloc) {
+    Random rnd = Random();
+    int randomNumber = rnd.nextInt(10000) ;//rnd.nextInt(10000); //2
+    bool repetido = false;
+    listaProductosBloc.forEach((element) {
+      if (element.id == randomNumber.toString() ) {
+        repetido = true;
+      }
+    });
+
+    if (repetido) {
+      buscarIdNoRepetido(listaProductosBloc);
+    }
+    return randomNumber;
+
   }
 
   Future<void> _onValidarProducto(OnValidarProducto event, Emitter emit) async {
