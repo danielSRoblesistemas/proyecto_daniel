@@ -30,7 +30,21 @@ class VistaPrimeraView extends StatelessWidget {
       listener: (context, state) {
         if (state.error.isEmpty) {
           if (state.accion == Environment.blocOnNuevoProducto || state.accion == Environment.blocOnModificarProducto) {
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FichaProductoView()));
+            
+
+              showDialog<String>(
+                  context: context,
+                  builder: (context) => PopAppSolicitudes(
+                      titulo:
+                          (state.producto.id.isNotEmpty) ? 'Ficha Categoria' : 'Alta Categoria', //state.chatbot.nombre
+                      altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                          desktop: 25, tablet: 30, mobile: 30, phone: 35),
+                      isBotonSalir: true,
+                      // ancho: 1000,
+                      paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
+                      paddingTitulo: const EdgeInsets.only(top: 0),
+                      child: _ProductoModal()));
+            // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FichaProductoView()));
             //esta navegacion no va a funcar esta solo de referencia
           }
         }
@@ -108,8 +122,7 @@ class VistaPrimeraView extends StatelessWidget {
                       ),
                     ),
                   ],
-                  rows: state.producto
-                      .obtenerListaEstatica()
+                  rows: [...state.listaProductos
                       .map((e) => DataRow(cells: [
                             DataCellModelWidget.modelo(
                               anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 45, phone: context.ancho * 50),
@@ -138,7 +151,7 @@ class VistaPrimeraView extends StatelessWidget {
                             ),
                           ]))
                       .toList(),
-
+                  ]
                   //quede en el modal
                 )
 

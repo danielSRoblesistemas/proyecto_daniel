@@ -8,6 +8,7 @@ class Environment {
 
 //Producto
   static String blocOnNuevoProducto = 'OnNuevoProducto';
+  static String blocOnValidaProducto = 'OnValidaProducto';
   static String blocOnModificarProducto = 'OnModificarProducto';
   static String blocOnGuardarProducto = 'OnGuardarProducto';
   static String blocOnActualizaProducto = 'OnActualizaProducto';

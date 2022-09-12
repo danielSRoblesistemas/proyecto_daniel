@@ -18,9 +18,8 @@ class OnModificarProducto extends ProductoEvent {
 
 class OnValidarProducto extends ProductoEvent {
   final ProductoModel producto;
-  final int pagina;
   const OnValidarProducto(
-      {required this.producto, required this.pagina});
+      {required this.producto});
 }
 
 class OnGuardarProducto extends ProductoEvent {
