@@ -27,7 +27,8 @@ class ItemFormulario extends StatelessWidget { // ocupado en categorias view
                 controller: TextEditingController(text: valor),
                 decoration: InputDecoration(
                   labelStyle: TextStyle(fontSize: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 12, mobile: 12, phone: 14))
-                ) ,
+                ),
+                // desactivarCampo: true,
                 maxWidth: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 360, tablet: 440, mobile: 360, phone: 190),
                 labelTitulo: ProductoModel.tituloFormulario[titulo]!, // Nombre
                 onChanged: (value) {

@@ -86,18 +86,11 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
 
     List<ProductoModel> listaProductosBloc = state.listaProductos;
     ProductoModel producto = state.producto;
-    bool modifica = false;
+    listaProductosBloc.removeWhere((element) => element.id == producto.id);
+    producto = producto.copyWith(id: listaProductosBloc.length.toString());
 
-    listaProductosBloc.forEach((element) {
-      if (element.id == producto.id) {
-        element = producto;
-        modifica = true;
-      } else {}
-    });
-
-    if (!modifica) {
-      listaProductosBloc.add(producto);
-    }
+    // ProductoModel productoFinal = state.producto;
+    listaProductosBloc.add(producto);
 
     emit(state.copyWith(
       listaProductos: listaProductosBloc,
