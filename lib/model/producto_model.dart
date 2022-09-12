@@ -6,11 +6,10 @@ class ProductoModel {
 
   ProductoModel copyWith({
     String? id,
-    String? descripcion,
     Map<String, dynamic>? data,
   }) =>
       ProductoModel(
-        id: id ?? this.id,
+        id:id ?? this.id,//data?["id"] ?? id,// id ?? this.id,
         descripcion: data?["descripcion"] ?? descripcion,
       );
 

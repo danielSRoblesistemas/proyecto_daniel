@@ -20,9 +20,9 @@ class ItemFormulario extends StatelessWidget { // ocupado en categorias view
   @override
   Widget build(BuildContext context) {
 
-    return Row(
+    return Column(
       children: [
-        if (!titulo.contains(ProductoModel.tituloFormulario.keys.elementAt(0))) 
+        if (titulo.contains(ProductoModel.tituloFormulario.keys.elementAt(0))) 
               TextfieldModelWidget.estandar(
                 controller: TextEditingController(text: valor),
                 decoration: InputDecoration(
@@ -31,25 +31,25 @@ class ItemFormulario extends StatelessWidget { // ocupado en categorias view
                 maxWidth: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 360, tablet: 440, mobile: 360, phone: 190),
                 labelTitulo: ProductoModel.tituloFormulario[titulo]!, // Nombre
                 onChanged: (value) {
-                  ///Se pasa al padre lo que se haya modificado
                   onChanged.call(value);
                 },
             ),
-//            if (titulo ==  ProductoModel.tituloFormulario.keys.elementAt(1)) 
-// // desestructuro para poder agregar mas de un widget al if
-//                 Text(titulo)
-            //   TextfieldModelWidget.estandar(
-            //     controller: TextEditingController(text: valor),
-            //     decoration: InputDecoration(
-            //       labelStyle: TextStyle(fontSize: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 12, mobile: 12, phone: 14))
-            //     ) ,
-            //     maxWidth: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 360, tablet: 440, mobile: 360, phone: 190),
-            //     labelTitulo: ProductoModel.tituloFormulario[titulo]!, // Nombre
-            //     onChanged: (value) {
-            //       ///Se pasa al padre lo que se haya modificado
-            //       onChanged.call(value);
-            //     },
-            // )
+            const SizedBox(height: 10),
+           if (titulo ==  ProductoModel.tituloFormulario.keys.elementAt(1)) 
+// desestructuro para poder agregar mas de un widget al if
+                // Text(titulo)
+              TextfieldModelWidget.estandar(
+                controller: TextEditingController(text: valor),
+                decoration: InputDecoration(
+                  labelStyle: TextStyle(fontSize: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 12, mobile: 12, phone: 14))
+                ) ,
+                maxWidth: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 360, tablet: 440, mobile: 360, phone: 190),
+                labelTitulo: ProductoModel.tituloFormulario[titulo]!, // Nombre
+                onChanged: (value) {
+                  
+                  onChanged.call(value);
+                },
+            )
       
       ],
     );

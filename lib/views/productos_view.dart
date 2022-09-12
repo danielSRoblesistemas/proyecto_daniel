@@ -10,7 +10,6 @@ import 'package:proyecto_daniel/global/environment.dart';
 import 'package:proyecto_daniel/model/producto_model.dart';
 import 'package:proyecto_daniel/utils/size.dart';
 import 'package:proyecto_daniel/utils/responsive_wrapper_utils.dart';
-import 'package:proyecto_daniel/views/ficha_producto_view.dart';
 import 'package:proyecto_daniel/widgets/button_widget.dart';
 import 'package:proyecto_daniel/widgets/data_cell_model_widget.dart';
 import 'package:proyecto_daniel/widgets/item_formulario.dart';
@@ -30,22 +29,22 @@ class VistaPrimeraView extends StatelessWidget {
       listener: (context, state) {
         if (state.error.isEmpty) {
           if (state.accion == Environment.blocOnNuevoProducto || state.accion == Environment.blocOnModificarProducto) {
-            
-
-              showDialog<String>(
-                  context: context,
-                  builder: (context) => PopAppSolicitudes(
-                      titulo:
-                          (state.producto.id.isNotEmpty) ? 'Ficha Categoria' : 'Alta Categoria', //state.chatbot.nombre
-                      altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                          desktop: 25, tablet: 30, mobile: 30, phone: 35),
-                      isBotonSalir: true,
-                      // ancho: 1000,
-                      paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
-                      paddingTitulo: const EdgeInsets.only(top: 0),
-                      child: _ProductoModal()));
+            showDialog<String>(
+                context: context,
+                builder: (context) => PopAppSolicitudes(
+                    titulo: (state.producto.id.isNotEmpty) ? 'Ficha Categoria' : 'Alta Categoria', //state.chatbot.nombre
+                    altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 40, tablet: 30, mobile: 30, phone: 35),
+                    isBotonSalir: true,
+                    // ancho: 1000,
+                    paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
+                    paddingTitulo: const EdgeInsets.only(top: 0),
+                    child: _ProductoModal()));
             // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FichaProductoView()));
             //esta navegacion no va a funcar esta solo de referencia
+          }
+          if (state.accion == Environment.blocOnValidaProducto) {
+            context.read<ProductoBloc>().add(const OnGuardarProducto());
+            Navigator.pop(context);
           }
         }
       },
@@ -76,107 +75,90 @@ class VistaPrimeraView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Expanded(child: const SizedBox(height: 30)),
+                      const Expanded(child: const SizedBox(height: 30)),
                       const Icon(Icons.add, color: Colors.orange, size: 20),
                       TextModelWidget.titulo(texto: 'Nuevo Producto', tamanioTexto: 15, colorTexto: Colors.orange),
                       const SizedBox(width: 30)
                     ],
                   ),
                 ),
-
                 DataTable(
-                  horizontalMargin: 0,
-                  columnSpacing: 0,
-                  headingRowHeight: 25,
-                  dataRowHeight: 30,
-                  headingRowColor: MaterialStateProperty.all<Color>(Colores.grisFondo),
-                  columns: [
-                    DataColumn(
-                      label: Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          alignment: Alignment.centerLeft,
-                          height: 25,
-                          width: context.ancho * 20,
-                          child: TextModelWidget.titulo(
-                            tamanioTexto: 12,
-                            tipoFuente: FontWeight.w600,
-                            texto: 'ID Producto',
+                    horizontalMargin: 0,
+                    columnSpacing: 0,
+                    headingRowHeight: 25,
+                    dataRowHeight: 30,
+                    headingRowColor: MaterialStateProperty.all<Color>(Colores.grisFondo),
+                    columns: [
+                      DataColumn(
+                        label: Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            alignment: Alignment.centerLeft,
+                            height: 25,
+                            width: context.ancho * 20,
+                            child: TextModelWidget.titulo(
+                              tamanioTexto: 12,
+                              tipoFuente: FontWeight.w600,
+                              texto: 'ID Producto',
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          alignment: Alignment.centerLeft,
-                          height: 25,
-                          width: context.ancho * 20,
-                          child: TextModelWidget.titulo(
-                            tamanioTexto: 12,
-                            tipoFuente: FontWeight.w600,
-                            texto: 'Descripcion',
+                      DataColumn(
+                        label: Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            alignment: Alignment.centerLeft,
+                            height: 25,
+                            width: context.ancho * 20,
+                            child: TextModelWidget.titulo(
+                              tamanioTexto: 12,
+                              tipoFuente: FontWeight.w600,
+                              texto: 'Descripcion',//state.listaProductos.length.toString()
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                  rows: [...state.listaProductos
-                      .map((e) => DataRow(cells: [
-                            DataCellModelWidget.modelo(
-                              anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 45, phone: context.ancho * 50),
-                              padding: const EdgeInsets.only(left: 5),
-                              valor: e.id,
-                              ontap: () {},
-                            ),
-                            DataCellModelWidget.modelo(
-                              anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 35, phone: context.ancho * 50),
-                              padding: const EdgeInsets.only(left: 5),
-                              valor: e.descripcion,
-                              ontap: () {
-                                showDialog<String>(
-                                    context: context,
-                                    builder: (context) => PopAppSolicitudes(
-                                        titulo:
-                                            (state.producto.id.isNotEmpty) ? 'Ficha Categoria' : 'Alta Categoria', //state.chatbot.nombre
-                                        altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                                            desktop: 25, tablet: 30, mobile: 30, phone: 35),
-                                        isBotonSalir: true,
-                                        // ancho: 1000,
-                                        paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
-                                        paddingTitulo: const EdgeInsets.only(top: 0),
-                                        child: _ProductoModal()));
-                              },
-                            ),
-                          ]))
-                      .toList(),
-                  ]
-                  //quede en el modal
-                )
+                    ],
+                    rows: [
+                      ...state.listaProductos
+                          .map((e) => DataRow(cells: [
+                                DataCellModelWidget.modelo(
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 45, phone: context.ancho * 50),
+                                  padding: const EdgeInsets.only(left: 5),
+                                  valor: e.id,
+                                  ontap: () {
+                                    context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
+                                  },
+                                ),
+                                DataCellModelWidget.modelo(
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 35, phone: context.ancho * 50),
+                                  padding: const EdgeInsets.only(left: 5),
+                                  valor: e.descripcion,
+                                  ontap: () {
+                                    // context.read<ProductoBloc>().add(const OnNuevoProducto());
+                                    context.read<ProductoBloc>().add( OnModificarProducto(idProducto: e.id));
+                                    // showDialog<String>(
+                                    //     context: context,
+                                    //     builder: (context) => PopAppSolicitudes(
+                                    //         titulo: (state.producto.id.isNotEmpty)
+                                    //             ? 'Ficha Categoria'
+                                    //             : 'Alta Categoria', //state.chatbot.nombre
+                                    //         altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
+                                    //             desktop: 25, tablet: 30, mobile: 30, phone: 35),
+                                    //         isBotonSalir: true,
+                                    //         // ancho: 1000,
+                                    //         paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
+                                    //         paddingTitulo: const EdgeInsets.only(top: 0),
+                                    //         child: _ProductoModal()));
 
-                // Container(
-                //   padding: const EdgeInsets.only(top: 20),
-                //   width: context.ancho * 60,
-                //   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                //   child: Column(
-                //     children: [
-                //       Text(
-                //         'Producto',
-                //         style: GoogleFonts.montserratAlternates(
-                //           //prompt, roboto
-                //           fontSize: 25,
-                //           color: Colors.black54,
-                //           fontWeight: FontWeight.bold,
-                //         ),
-                //       ),
-                //       Text('aca va ir mi tabla de producto recorrida por el toJson del modelo producto'),
-                //       // FloatingActionButton(onPressed: (() {
-                //       // }))
-                //       // const _ProductoVista()
-                //     ],
-                //   ),
-                // ),
+                                  },
+                                ),
+                              ]))
+                          .toList(),
+                    ]
+                    //quede en el modal
+                    )
               ],
             ),
           ),
@@ -218,10 +200,14 @@ class _ProductoModalState extends State<_ProductoModal> {
             ...producto.toJson().entries.map(
                   (item) => ItemFormulario(
                     titulo: item.key, // esto me sirve para poder detectar que campo es en el mapa util
-                    valor: item.key.contains(producto.id) ? producto.id : producto.descripcion,
+                    valor: item.key.contains('id') ? producto.id : producto.descripcion,
                     onChanged: (value) {
-                      print(value);
-                      producto = producto.copyWith(data: {'descripcion': value});
+                      // print(item.key);
+                      // print(value);
+                      producto = (item.key.contains('id'))
+                       ? producto.copyWith(id: value) 
+                       : producto.copyWith(data: {'descripcion': value});
+
                     },
                   ),
                 )
@@ -234,8 +220,7 @@ class _ProductoModalState extends State<_ProductoModal> {
                 titulo: (producto.id.isEmpty) ? 'Guardar' : 'Atualizar',
                 tamanioTexto: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 16, tablet: 14, mobile: 14, phone: 12),
                 onPressed: () {
-                  // context.read<ProductoBloc>().add(OnValidarProducto(
-                  //     producto: producto, pagina: 0));
+                  context.read<ProductoBloc>().add(OnValidarProducto(producto: producto));
                 },
               ),
               ButtonModeWidget.botonSimple(
