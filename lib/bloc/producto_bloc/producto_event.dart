@@ -40,6 +40,12 @@ class OnEliminarProducto extends ProductoEvent {
   const OnEliminarProducto({required this.idProducto});
 }
 
+class OnOrdenarProductos extends ProductoEvent {
+  // final String idProducto;
+  const OnOrdenarProductos();
+}
+
+
 
 
 

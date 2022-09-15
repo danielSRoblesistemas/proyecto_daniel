@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_daniel/views/login.dart';
 
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,12 +30,20 @@ class MyApp extends StatelessWidget {
                 defaultScale: true,
                 breakpoints: const [
                   ResponsiveBreakpoint.autoScale(260, name: PHONE),
-                  ResponsiveBreakpoint.autoScale(500, name: MOBILE),
+                  ResponsiveBreakpoint.autoScale(480, name: MOBILE),
                   ResponsiveBreakpoint.autoScale(780, name: TABLET),
                   ResponsiveBreakpoint.autoScale(1200, name: DESKTOP),
                 ],
               ),
-        home: const HomeView()            
+        // home: const LoginPage(), //HomeView(),  LoginPage()        
+        initialRoute: '/login',
+        routes: {
+          '/login':(context) => const LoginPage(),
+          '/home':(context) => const HomeView()
+        },
+        theme: ThemeData(
+          primarySwatch: Colors.orange
+        )
       ),
     );
   }

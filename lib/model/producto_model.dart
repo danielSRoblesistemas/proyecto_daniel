@@ -1,8 +1,10 @@
-class ProductoModel {
+import 'package:equatable/equatable.dart';
+
+class ProductoModel extends Equatable{
   final String id;
   final String descripcion;
 
-  ProductoModel({this.id = '', this.descripcion = ''});
+ const ProductoModel({this.id = '', this.descripcion = ''});
 
   ProductoModel copyWith({
     String? id,
@@ -18,6 +20,8 @@ class ProductoModel {
         "descripcion": descripcion,
       };
 
+
+  @override
   List<Object?> get props => [
         id,
         descripcion,
@@ -25,9 +29,9 @@ class ProductoModel {
 
   List<ProductoModel> obtenerListaEstatica() {
     List<ProductoModel> listaProducto = [];
-    ProductoModel producto1 = ProductoModel(id: '1', descripcion: 'Pc');
-    ProductoModel producto2 = ProductoModel(id: '2', descripcion: 'Monitor');
-    ProductoModel producto3 = ProductoModel(id: '3', descripcion: 'Teclado/mouse');
+    ProductoModel producto1 = const ProductoModel(id: '1', descripcion: 'Pc');
+    ProductoModel producto2 = const ProductoModel(id: '2', descripcion: 'Monitor');
+    ProductoModel producto3 = const ProductoModel(id: '3', descripcion: 'Teclado/mouse');
     listaProducto.add(producto1);
     listaProducto.add(producto2);
     listaProducto.add(producto3);

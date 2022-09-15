@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import '../utils/responsive_con_context.dart';
 
 import 'package:proyecto_daniel/bloc/notificaciones/notificaciones_bloc.dart';
@@ -19,8 +22,6 @@ import 'package:proyecto_daniel/widgets/item_formulario.dart';
 import 'package:proyecto_daniel/widgets/popaap_ficha.dart';
 import 'package:proyecto_daniel/widgets/text_widget.dart';
 
-
-
 class VistaPrimeraView extends StatelessWidget {
   const VistaPrimeraView({super.key});
 
@@ -32,15 +33,28 @@ class VistaPrimeraView extends StatelessWidget {
         if (state.error.isEmpty) {
           if (state.accion == Environment.blocOnNuevoProducto || state.accion == Environment.blocOnModificarProducto) {
             showDialog<String>(
+              barrierDismissible: true,
                 context: context,
-                builder: (context) => PopAppSolicitudes(
-                    titulo: (state.producto.id.isNotEmpty) ? 'Ficha Producto' : 'Alta Producto', //state.chatbot.nombre
-                    altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 40, tablet: 40, mobile: 40, phone: 40),
-                    isBotonSalir: true,
-                    // ancho: 1000,
-                    paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
-                    paddingTitulo: const EdgeInsets.only(top: 0),
-                    child: _ProductoModal()));
+                barrierColor: Colors.transparent,
+                builder: (context) => Stack(
+                  children: [
+                    Positioned(
+                      top: context.alto * 40,
+                      left: context.ancho * 37,
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                        child: PopAppSolicitudes(
+                            titulo: (state.producto.id.isNotEmpty) ? 'Ficha Producto' : 'Alta Producto', //state.chatbot.nombre
+                            altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 40, tablet: 40, mobile: 50, phone: 40),
+                            isBotonSalir: true,
+                            // ancho: 1000,
+                            paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
+                            paddingTitulo: const EdgeInsets.only(top: 0),
+                            child: _ProductoModal()),
+                      ),
+                    ),
+                  ],
+                ));
             // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => FichaProductoView()));
             //esta navegacion no va a funcar esta solo de referencia
           }
@@ -60,8 +74,8 @@ class VistaPrimeraView extends StatelessWidget {
           }
         } else {
           context.read<NotificacionesBloc>().add(OnNuevaNotificacionEvent(
-                const Notificacion(
-                  descripcion: 'Debe completar el campo requerido',
+                Notificacion(
+                  descripcion: state.error,
                   tipoNotificacion: TipoNotificacion.error,
                   titulo: 'Error',
                 ),
@@ -69,9 +83,16 @@ class VistaPrimeraView extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        final bool isPhone = (ResponsiveWrapper.of(context).isPhone) ? true : false;
+        final bool isMobile = (ResponsiveWrapper.of(context).isMobile) ? true : false;
         return Container(
           height: double.infinity,
-          padding: const EdgeInsets.only(top: 20, left: 25),
+          width: ResponsiveWrapperUtilsContext.determinarTamano(context,
+              desktop: context.ancho * 50,
+              tablet: context.ancho * 50,
+              mobile: context.ancho * 60,
+              phone: context.ancho * 99), //context.ancho * 50,
+          padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
           color: Colores.grisFondo,
           child: SingleChildScrollView(
             child: Column(
@@ -85,24 +106,73 @@ class VistaPrimeraView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    context.read<ProductoBloc>().add(const OnNuevoProducto());
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Expanded(
-                          child: SizedBox(
-                        height: 40,
-                      )),
-                      const Icon(Icons.add, color: Colors.orange, size: 20),
-                      TextModelWidget.titulo(texto: 'Nuevo Producto', tamanioTexto: 15, colorTexto: Colors.orange),
-                      SizedBox(width: context.ancho * 3)
-                    ],
-                  ),
+                SizedBox(height: context.alto * 3),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                          // String n = 'a';
+                          // print(int.tryParse(n)); 
+
+                        context.read<ProductoBloc>().add(const OnNuevoProducto());
+                      },
+                      child: Row(
+                        children: [
+                          SizedBox(width: context.ancho * 1),
+                          const Icon(Icons.add, color: Colors.green, size: 20),
+                          TextModelWidget.titulo(texto: 'Nuevo Producto', tamanioTexto: 15, colorTexto: Colors.green),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: context.ancho * 3),
+                    const Expanded(
+                        child: SizedBox(
+                      height: 40,
+                    )),
+                    if (!isPhone && !isMobile)
+                      InkWell(
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.list_rounded,
+                              color: Colors.orange,
+                              size: 15,
+                            ),
+                            TextModelWidget.titulo(
+                              texto: 'Ordenar',
+                              tamanioTexto: 13,
+                              colorTexto: Colors.orange,
+                              tipoFuente: FontWeight.bold,
+                            ),
+                          ],
+                        ), // refresh.
+                       
+                        onTap: () => context.read<ProductoBloc>().add(const OnOrdenarProductos())
+                      ),
+                    SizedBox(width: context.ancho * 5)
+                  ],
                 ),
+                if (isPhone || isMobile)
+                  InkWell(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.list_rounded,
+                            color: Colors.orange,
+                            size: 15,
+                          ),
+                          TextModelWidget.titulo(
+                            texto: 'Ordenar',
+                            tamanioTexto: 13,
+                            colorTexto: Colors.orange,
+                            tipoFuente: FontWeight.bold,
+                          ),
+                        ],
+                      ), // refresh
+                      onTap: () => context.read<ProductoBloc>().add(const OnOrdenarProductos())),
+                const Divider(color: Colors.grey),
                 DataTable(
                     horizontalMargin: 0,
                     columnSpacing: 0,
@@ -113,7 +183,7 @@ class VistaPrimeraView extends StatelessWidget {
                       DataColumn(
                         label: Expanded(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            // padding: const EdgeInsets.symmetric(horizontal: 10),
                             alignment: Alignment.centerLeft,
                             height: 25,
                             width: context.ancho * 20,
@@ -128,10 +198,10 @@ class VistaPrimeraView extends StatelessWidget {
                       DataColumn(
                         label: Expanded(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            // padding: const EdgeInsets.symmetric(horizontal: 10),
                             alignment: Alignment.centerLeft,
                             height: 25,
-                            width: context.ancho * 20,
+                            width: context.ancho * 18,
                             child: TextModelWidget.titulo(
                               tamanioTexto: 12,
                               tipoFuente: FontWeight.w600,
@@ -143,7 +213,7 @@ class VistaPrimeraView extends StatelessWidget {
                       DataColumn(
                         label: Expanded(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
                             alignment: Alignment.centerLeft,
                             height: 20,
                             width: context.ancho * 20,
@@ -161,7 +231,7 @@ class VistaPrimeraView extends StatelessWidget {
                           .map((e) => DataRow(cells: [
                                 DataCellModelWidget.modelo(
                                   anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 10),
-                                  padding: const EdgeInsets.only(left: 15),
+                                  padding: const EdgeInsets.only(left: 30),
                                   valor: e.id,
                                   ontap: () {
                                     context.read<ProductoBloc>().add(OnModificarProducto(idProducto: e.id));
@@ -177,9 +247,9 @@ class VistaPrimeraView extends StatelessWidget {
                                   },
                                 ),
                                 DataCellModelWidget.modelo(
-                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 20, phone: context.ancho * 10),
-                                  padding: const EdgeInsets.only(left: 25),
-                                  valor: e.descripcion,
+                                  anchoCampo: context.tamanoParaDispositivo(desktop: context.ancho * 22, phone: context.ancho * 10),
+                                  padding: const EdgeInsets.only(left: 35, right: 5),
+                                  // valor: e.descripcion,
                                   child: IconButton(
                                       onPressed: () {
                                         showDialog<String>(
@@ -187,14 +257,18 @@ class VistaPrimeraView extends StatelessWidget {
                                             builder: (context) => PopAppSolicitudes(
                                                 titulo: 'Seguro desea eliminar?', //state.chatbot.nombre
                                                 altoPorc: ResponsiveWrapperUtilsContext.determinarTamano(context,
-                                                    desktop: 40, tablet: 30, mobile: 30, phone: 35),
+                                                    desktop: 40, tablet: 20, mobile: 30, phone: 35),
                                                 isBotonSalir: true,
                                                 // ancho: 1000,
                                                 paddingContenido: const EdgeInsets.symmetric(horizontal: 10),
                                                 paddingTitulo: const EdgeInsets.only(top: 0),
                                                 child: _EliminarModal(producto: e)));
                                       },
-                                      icon: const Icon(Icons.cancel, color: Colores.eliminar)),
+                                      icon: const Icon(
+                                        Icons.cancel,
+                                        color: Colores.eliminar,
+                                        size: 20,
+                                      )),
                                   ontap: () {},
                                 ),
                               ]))
@@ -233,7 +307,7 @@ class _ProductoModalState extends State<_ProductoModal> {
       // padding: const EdgeInsets.only(top: 0),
       margin: EdgeInsets.symmetric(
           horizontal: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 10, tablet: 5, mobile: 10, phone: 5)),
-      width: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 380, tablet: 465, mobile: 465, phone: 465),
+      width: ResponsiveWrapperUtilsContext.determinarTamano(context, desktop: 380, tablet: 350, mobile: 250, phone: 465),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:proyecto_daniel/utils/size.dart';
@@ -28,10 +27,12 @@ class PopAppSolicitudes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
         return AlertDialog(
+
           insetPadding: const EdgeInsets.symmetric(horizontal: 10),
           actionsPadding: EdgeInsets.zero,
           titlePadding: paddingTitulo ?? const EdgeInsets.only(top: 20, bottom: 10, left: 5, right: 5),
           actionsAlignment: MainAxisAlignment.center,
+          backgroundColor: Colors.teal[50],
           scrollable: true,
           title: Stack(
             alignment: Alignment.topRight,

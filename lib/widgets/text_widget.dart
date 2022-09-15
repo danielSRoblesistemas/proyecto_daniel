@@ -56,7 +56,7 @@ class _TextTituloModelWidget extends TextModelWidget {
       fuentePrincipal.copyWith(
         color: colorTexto,
         fontSize: tamanioTexto,
-        fontWeight: tipoFuente,
+        fontWeight: tipoFuente,  
       ));
 
 }

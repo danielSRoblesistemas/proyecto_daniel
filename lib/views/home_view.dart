@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proyecto_daniel/bloc/notificaciones/notificaciones_bloc.dart';
 
 import 'package:proyecto_daniel/global/colores.dart';
+import 'package:proyecto_daniel/utils/responsive_con_context.dart';
 import 'package:proyecto_daniel/utils/responsive_wrapper_utils.dart';
 import 'package:proyecto_daniel/views/productos_view.dart';
 import 'package:proyecto_daniel/widgets/notificacion_widget.dart';
@@ -16,6 +17,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double ancho  = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -37,15 +39,24 @@ class HomeView extends StatelessWidget {
       ),
       body: Row(
         children: [
-          if (ResponsiveWrapperUtils(context).mostrarCuando(mobile: true, tablet: true, desktop: true)) const _MenuLateral(),
-          SizedBox(width: context.ancho * 5 ),
+          if (ResponsiveWrapperUtils(context).mostrarCuando(mobile: true, tablet: true, desktop: true) )
+            const _MenuLateral(),
+          SizedBox(
+              width: ResponsiveWrapperUtilsContext.determinarTamano(
+            context,
+            desktop: context.ancho * 18,
+            tablet: context.ancho * 18,
+            mobile: context.ancho * 8,
+            phone: context.ancho * 1,
+          )),
           Expanded(
               child: Stack(
             children: [
               const VistaPrimeraView(),
               BlocBuilder<NotificacionesBloc, NotificacionesState>(
                 builder: (context, state) {
-                  return Positioned( left: context.ancho * 25,
+                  return Positioned(
+                    left: context.ancho * 15,
                     child: Column(
                       children: state.notificaciones.entries
                           .map((e) => NotificacionWidget.agregaNotificacion(indice: e.key, notificacion: e.value))
@@ -55,8 +66,15 @@ class HomeView extends StatelessWidget {
                 },
               ),
             ],
-          )) ,//VistaPrimeraView
-           SizedBox(width: context.ancho * 5 ),
+          )), //VistaPrimeraView
+          SizedBox(
+              width: ResponsiveWrapperUtilsContext.determinarTamano(
+            context,
+            desktop: context.ancho * 5,
+            tablet: context.ancho * 5,
+            mobile: context.ancho * 1,
+            phone: context.ancho * 1,
+          ))
         ],
       ),
     );
